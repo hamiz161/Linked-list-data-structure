@@ -6,7 +6,7 @@
 public class SparseVector {
 
     private Node head;
-    private Node last ;
+   // private Node last ;
     private int lengthVictorNull = 0  ;
     private int lengthVictOriginal = 0;
     private  int sizeNonull = 0 ;
@@ -26,6 +26,10 @@ public class SparseVector {
         this(10);
     }
 
+    /**
+     * constructeur
+     * @param length longueur de vecteur creux
+     */
     public SparseVector(int length) {
 
         if(length > 0) {
@@ -41,7 +45,7 @@ public class SparseVector {
                 currantNode.next = new Node(null, null);
                 currantNode = currantNode.next;
 
-                this.last = currantNode;
+                //this.last = currantNode;
 
                 lengthVictorNull++;
                 lengthVictOriginal++;
@@ -101,7 +105,7 @@ public class SparseVector {
             throw new ArrayIndexOutOfBoundsException("Array index out of range: "+index);
 
        else if(this.size() == 1) {
-           last = head = null;
+            head = null;
            sizeNonull--;
            lengthVictorNull++;
        }
@@ -112,25 +116,21 @@ public class SparseVector {
 
             if(index == 0){
                head =curentNod;
-               sizeNonull--;
-               lengthVictorNull++;
 
-           }else {
+            }else {
 
                for (int j = 0; j < index; j++) {
+
                    if((index - j )!= 1)
                        previous =curentNod;
 
                    curentNod =curentNod.next;
-
-
-
                }
-                previous.next = curentNod;
+               previous.next = curentNod;
 
-                sizeNonull--;
-                lengthVictorNull++;
-           }
+            }
+           sizeNonull--;
+           lengthVictorNull++;
        }
     }
 
@@ -143,5 +143,15 @@ public class SparseVector {
     // Nombre d'éléments non nuls
     public int size() {
         return this.sizeNonull;
+    }
+    public void print() {
+        Node node = this.head;
+        int i = 0;
+        while (i < this.size()) {
+            System.out.println(node.data);
+            node = node.next;
+            i++;
+        }
+
     }
 }
