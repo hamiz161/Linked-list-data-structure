@@ -1,5 +1,5 @@
 /**
- * @author Hamza Guerabli - 20112229  
+ * @author Hamza Guerabli - 20112229
  * @author Prénom Nom - Matricule
  */
 
@@ -7,14 +7,9 @@ public class SparseVector {
 
     private Node head;
     private Node last ;
-    //private  Node previous;
     private int lengthVictorNull = 0  ;
     private int lengthVictOriginal = 0;
     private  int sizeNonull = 0 ;
-
-
-
-
 
     private class Node {
 
@@ -114,17 +109,25 @@ public class SparseVector {
 
             Node previous = head ;
             Node curentNod = head.next;
-           if(index == 0){
+
+            if(index == 0){
                head =curentNod;
+               sizeNonull--;
+               lengthVictorNull++;
+
            }else {
 
                for (int j = 0; j < index; j++) {
+                   if((index - j )!= 1)
+                       previous =curentNod;
 
-                   previous = curentNod;
-                   curentNod = curentNod.next;
+                   curentNod =curentNod.next;
+
+
+
                }
-                head = previous;
-                //head.next = curentNod;
+                previous.next = curentNod;
+
                 sizeNonull--;
                 lengthVictorNull++;
            }
