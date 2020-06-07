@@ -7,7 +7,7 @@ public class SparseVector {
 
     private Node head;
     private Node last ;
-    private  Node previous;
+    //private  Node previous;
     private int lengthVictorNull = 0  ;
     private int lengthVictOriginal = 0;
     private  int sizeNonull = 0 ;
@@ -39,18 +39,19 @@ public class SparseVector {
             lengthVictorNull++;
             lengthVictOriginal++;
 
-
             Node currantNode = head;
-            this.last = currantNode;
 
             for (int i = 1; i < length; i++) {
 
                 currantNode.next = new Node(null, null);
                 currantNode = currantNode.next;
+
                 this.last = currantNode;
+
                 lengthVictorNull++;
                 lengthVictOriginal++;
             }
+
         }else if(length < 0) {
             throw new IllegalArgumentException("Illegal Capacity");
         }
@@ -62,8 +63,9 @@ public class SparseVector {
     public Object get(int index) throws NullPointerException{
 
         Node node = head;
-        if (index < 0)
+        if (index < 0  )
             throw new NullPointerException("l'index : "+index+" out of bounds for length "+lengthVictOriginal);
+
         for (int i = 0; i < index ; i++)
             node = node.next;
 
@@ -72,48 +74,60 @@ public class SparseVector {
 
     // Ajouter ou mettre à jour l'élément à la position index
     public void set(int index, Object value) {
-        if(index < 0 || index >= lengthVictOriginal )
-            throw new ArrayIndexOutOfBoundsException("your Index  out of bounds");
+
+        if(index < 0 ||  index > this.size())
+            throw new ArrayIndexOutOfBoundsException("your Index  out of bounds ");
 
         else {
 
-            if (index == 0) {
-                Node currentNode = head;
-                currentNode.data = value;
-                sizeNonull++;
-                lengthVictorNull--;
+            Node curentNod = head;
 
+            for (int i = 0; i < index; i++) {
 
-            } else if (index == lengthVictOriginal) {
-                this.last.data = value;
-            } else {
-                Node curentNod = head;
-
-                for (int i = 1; i < index; i++) {
+                if(index != lengthVictOriginal )
                     curentNod = curentNod.next;
-                }
-                curentNod = curentNod.next;
-                curentNod.data = value;
-                sizeNonull++;
-                lengthVictorNull--;
             }
+
+            if (curentNod.data != null){
+                sizeNonull--;
+                lengthVictorNull++;
+            }
+            curentNod.data = value;
+
+            sizeNonull++;
+            lengthVictorNull--;
         }
+
     }
     // Supprimer l'élément à la position index
     public void remove(int index) {
-       if(lengthVictOriginal == 0)
+
+       if(this.size() == 0 || index < 0 || index >= this.size())
             throw new ArrayIndexOutOfBoundsException("Array index out of range: "+index);
-       else if(lengthVictOriginal == 1) {
+
+       else if(this.size() == 1) {
            last = head = null;
            sizeNonull--;
            lengthVictorNull++;
        }
        else{
-            Node curentNod = head;
-            previous = head;
-            while (curentNod.next != null){
 
-            }
+            Node previous = head ;
+            Node curentNod = head.next;
+           if(index == 0){
+               head =curentNod;
+           }else {
+
+               for (int j = 0; j < index; j++) {
+
+                   previous = curentNod;
+                   curentNod = curentNod.next;
+               }
+                head = previous;
+                //head.next = curentNod;
+                sizeNonull--;
+                lengthVictorNull++;
+           }
        }
     }
 
@@ -128,4 +142,3 @@ public class SparseVector {
         return this.sizeNonull;
     }
 }
-
