@@ -5,153 +5,161 @@
 
 public class SparseVector {
 
-    private Node head;
-   // private Node last ;
-    private int lengthVictorNull = 0  ;
-    private int lengthVictOriginal = 0;
-    private  int sizeNonull = 0 ;
+    private Node head = null;
+    private int length;
 
     private class Node {
 
-       public Object data ;
-       public Node next ;
+        public Object data ;
+        public Node next = null;
+        public int indexNode = 0;
 
-       public Node (Object data , Node next){
-           this.next = next ;
+        public Node (int index, Object data ){
            this.data = data ;
-       }
+           indexNode = index ;
+        }
     }
 
     public SparseVector() {
         this(10);
     }
 
-    /**
-     * constructeur
-     * @param length longueur de vecteur creux
-     */
+
     public SparseVector(int length) {
 
-        if(length > 0) {
-
-            head = new Node(null, null);
-            lengthVictorNull++;
-            lengthVictOriginal++;
-
-            Node currantNode = head;
-
-            for (int i = 1; i < length; i++) {
-
-                currantNode.next = new Node(null, null);
-                currantNode = currantNode.next;
-
-                //this.last = currantNode;
-
-                lengthVictorNull++;
-                lengthVictOriginal++;
-            }
-
-        }else if(length < 0) {
-            throw new IllegalArgumentException("Illegal Capacity");
+        if(length > 0 ) {
+            this.length = length;
         }
+        else
+            throw new IllegalArgumentException("Illegal Capacity");
     }
 
     // Obtenir la valeur de l'élément à la position index
 
-
+    /**
+     *
+     * @param index
+     * @return la valeur
+     * @throws NullPointerException
+     */
     public Object get(int index) throws NullPointerException{
 
+        if (index < 0  || index >= this.length  )
+            throw new NullPointerException("l'index :  out of bounds for length "+ length);
+
         Node node = head;
-        if (index < 0  )
-            throw new NullPointerException("l'index : "+index+" out of bounds for length "+lengthVictOriginal);
 
-        for (int i = 0; i < index ; i++)
+        while (node != null) {
+            if (node.indexNode == index) {
+                return node.data;
+            }
+
             node = node.next;
+        }
 
-        return node.data;
+        return null;
     }
-
     // Ajouter ou mettre à jour l'élément à la position index
+
     public void set(int index, Object value) {
 
-        if(index < 0 ||  index > this.size())
+        if(index < 0 || index >= this.length)
             throw new ArrayIndexOutOfBoundsException("your Index  out of bounds ");
 
         else {
+                Node node = head;
+                Node previous = null;
 
-            Node curentNod = head;
+                if (node == null) {
+                    head = new Node(index, value);
+                } else {
+                    while (node != null) {
+                        if (node.indexNode == index) {
+                            node.data = value;
+                            break;
+                        } else if(node.indexNode > index) {
+                            if (previous == null) {
+                                head = new Node(index, value);
+                                head.next = node;
+                            } else {
+                                previous.next = new Node(index, value);
+                                previous.next.next = node;
+                            }
+                            break;
+                        } else {
+                            previous = node;
+                            node = previous.next;
 
-            for (int i = 0; i < index; i++) {
+                            if (node == null) {
+                                previous.next = new Node(index, value);
+                            }
+                        }
+                    }
+                }
 
-                if(index != lengthVictOriginal )
-                    curentNod = curentNod.next;
             }
-
-            if (curentNod.data != null){
-                sizeNonull--;
-                lengthVictorNull++;
-            }
-            curentNod.data = value;
-
-            sizeNonull++;
-            lengthVictorNull--;
-        }
-
     }
     // Supprimer l'élément à la position index
     public void remove(int index) {
 
-       if(this.size() == 0 || index < 0 || index >= this.size())
+        if(index < 0 || index >= this.length)
             throw new ArrayIndexOutOfBoundsException("Array index out of range: "+index);
 
-       else if(this.size() == 1) {
+        Node node = head ;
+        if(node.next == null) // length == 1
             head = null;
-           sizeNonull--;
-           lengthVictorNull++;
-       }
-       else{
-
-            Node previous = head ;
-            Node curentNod = head.next;
-
-            if(index == 0){
-               head =curentNod;
-
-            }else {
-
-               for (int j = 0; j < index; j++) {
-
-                   if((index - j )!= 1)
-                       previous =curentNod;
-
-                   curentNod =curentNod.next;
-               }
-               previous.next = curentNod;
-
+        else { // length > 1
+            Node previous = null;
+            while (node != null){
+                if(node.indexNode == index ) {
+                    if (previous == null) {
+                        this.head = node.next;
+                    } else {
+                        if (node.next == null) {
+                            previous.next = null;
+                        } else {
+                            previous.next = node.next;
+                        }
+                    }
+                }
+                previous = node;
+                node = previous.next;
             }
-           sizeNonull--;
-           lengthVictorNull++;
-       }
+        }
     }
 
     // Longueur du vecteur creux
 
-    public int length() {
-        return this.lengthVictorNull;
+    int length() {
+        int length = this.length;
+        Node node = head;
+
+        while(node != null) {
+            node = node.next;
+            length --;
+        }
+
+        return length;
     }
 
     // Nombre d'éléments non nuls
     public int size() {
-        return this.sizeNonull;
+        int length = 0;
+        Node node = head;
+
+        while(node != null) {
+            node = node.next;
+            length ++;
+        }
+
+        return length;
     }
     public void print() {
         Node node = this.head;
-        int i = 0;
-        while (i < this.size()) {
+
+        while(node != null) {
             System.out.println(node.data);
             node = node.next;
-            i++;
         }
-
     }
 }
