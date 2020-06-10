@@ -72,21 +72,25 @@ public class SparseVector {
 
                 if (node == null) {
                     head = new Node(index, value);
+
                 } else {
                     while (node != null) {
                         if (node.indexNode == index) {
                             node.data = value;
                             break;
+
                         } else if(node.indexNode > index) {
                             if (previous == null) {
                                 head = new Node(index, value);
                                 head.next = node;
+
                             } else {
                                 previous.next = new Node(index, value);
                                 previous.next.next = node;
                             }
                             break;
                         } else {
+                            
                             previous = node;
                             node = previous.next;
 
@@ -105,25 +109,28 @@ public class SparseVector {
         if(index < 0 || index >= this.length)
             throw new ArrayIndexOutOfBoundsException("Array index out of range: "+index);
 
-        Node node = head ;
-        if(node.next == null) // length == 1
+        Node nodeCuren = head ;
+
+        if(nodeCuren.next == null)
             head = null;
-        else { // length > 1
+
+        else {
             Node previous = null;
-            while (node != null){
-                if(node.indexNode == index ) {
+            while (nodeCuren != null){
+
+                if(nodeCuren.indexNode == index ) {
                     if (previous == null) {
-                        this.head = node.next;
+                        this.head = nodeCuren.next;
                     } else {
-                        if (node.next == null) {
+                        if (nodeCuren.next == null) {
                             previous.next = null;
                         } else {
-                            previous.next = node.next;
+                            previous.next = nodeCuren.next;
                         }
                     }
                 }
-                previous = node;
-                node = previous.next;
+                previous = nodeCuren;
+                nodeCuren = previous.next;
             }
         }
     }
