@@ -154,6 +154,10 @@ public class SparseVector {
 
         return length;
     }
+
+    /**
+     * méthode pour tester
+     */
     public void print() {
         Node node = this.head;
 
