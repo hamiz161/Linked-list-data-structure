@@ -1,7 +1,10 @@
 /**
  * @author Hamza Guerabli - 20112229
- * @author Prénom Nom - Matricule
- */
+ * @author Yuyin Ding  - Matricule
+ *
+ *
+ * méthode print() pour tester a la fin
+ * */
 
 public class SparseVector {
 
@@ -33,9 +36,6 @@ public class SparseVector {
         else
             throw new IllegalArgumentException("Illegal Capacity");
     }
-
-    // Obtenir la valeur de l'élément à la position index
-
     /**
      *
      * @param index
@@ -59,9 +59,13 @@ public class SparseVector {
 
         return null;
     }
-    // Ajouter ou mettre à jour l'élément à la position index
-
-    public void set(int index, Object value) {
+    /**
+     *
+     * @param index
+     * @param value
+     * @throws NullPointerException
+     */
+    public void set(int index, Object value)throws NullPointerException {
 
         if(index < 0 || index >= this.length)
             throw new ArrayIndexOutOfBoundsException("your Index  out of bounds ");
@@ -90,7 +94,7 @@ public class SparseVector {
                             }
                             break;
                         } else {
-                            
+
                             previous = node;
                             node = previous.next;
 
@@ -103,7 +107,11 @@ public class SparseVector {
 
             }
     }
-    // Supprimer l'élément à la position index
+
+    /**
+     *
+     * @param index
+     */
     public void remove(int index) {
 
         if(index < 0 || index >= this.length)
@@ -111,19 +119,27 @@ public class SparseVector {
 
         Node nodeCuren = head ;
 
+        // si on juste un node a la position 0
         if(nodeCuren.next == null)
             head = null;
 
         else {
+
             Node previous = null;
             while (nodeCuren != null){
 
                 if(nodeCuren.indexNode == index ) {
+                    // supprimer le prmier node d un vector length > 0
                     if (previous == null) {
                         this.head = nodeCuren.next;
+
+
                     } else {
+                        //suprimer le dernier node
                         if (nodeCuren.next == null) {
                             previous.next = null;
+
+                        // suprimer un node au milieu de la liste
                         } else {
                             previous.next = nodeCuren.next;
                         }
@@ -135,9 +151,11 @@ public class SparseVector {
         }
     }
 
-    // Longueur du vecteur creux
-
-    int length() {
+    /**
+     *
+     * @return la taille  de vector null
+     */
+   public int length() {
         int length = this.length;
         Node node = head;
 
@@ -149,7 +167,10 @@ public class SparseVector {
         return length;
     }
 
-    // Nombre d'éléments non nuls
+    /**
+     *
+     * @return la taille de vector non null
+     */
     public int size() {
         int length = 0;
         Node node = head;
