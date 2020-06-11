@@ -1,6 +1,6 @@
 /**
  * @author Hamza Guerabli - 20112229
- * @author Yuyin Ding  - Matricule
+ * @author Yuyin Ding  - 20125263
  *
  *
  * méthode print() pour tester a la fin
