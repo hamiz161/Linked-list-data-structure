@@ -120,7 +120,7 @@ public class SparseVector {
         Node nodeCuren = head ;
 
         // si on juste un node a la position 0
-        if(nodeCuren.next == null)
+        if(nodeCuren.next == null &&  nodeCuren.indexNode == index)
             head = null;
 
         else {
