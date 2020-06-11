@@ -1,161 +1,119 @@
 /**
- * @author Hamza Guerabli - 20112229
- * @author Yuyin Ding  - 20125263
- *
- *
- * méthode print() pour tester a la fin
- * */
+ * @author Prénom Nom - Matricule
+ * @author Prénom Nom - Matricule
+ */
 
 public class SparseVector {
 
-    private Node head = null;
-    private int length;
 
-    private class Node {
+    // TODO Ajoutez vos attributs ici
+    public class Node {
+        public int element;
+        public Node prochain;
+        private int length;
+        private Node premier;
 
-        public Object data ;
-        public Node next = null;
-        public int indexNode = 0;
-
-        public Node (int index, Object data ){
-           this.data = data ;
-           indexNode = index ;
+        public Node ( int element, Node prochain ) {
+            this.element = element;
+            this.prochain = prochain;
         }
     }
+
+    public class ListIndexOutOfBounds extends Exception {
+
+        public ListIndexOutOfBounds() {
+        }
+
+        public ListIndexOutOfBounds(String str) {
+            super(str);
+        }
+
+        public void getMessage() {
+            return "Illegal Capacity";
+        }
+    }
+
+
 
     public SparseVector() {
         this(10);
     }
 
-
-    public SparseVector(int length) {
-
-        if(length > 0 ) {
+    public SparseVector(int length) { // Number of elements
+        if (length > 0) {
             this.length = length;
+        } else
+            ListIndexOutOfBounds e;
+            System.out.println( e.getMessage() );
+            System.exit( 1 );
         }
-        else
-            throw new IllegalArgumentException("Illegal Capacity");
-    }
-    /**
-     *
-     * @param index
-     * @return la valeur
-     * @throws NullPointerException
-     */
-    public Object get(int index) throws NullPointerException{
 
-        if (index < 0  || index >= this.length  )
-            throw new NullPointerException("l'index :  out of bounds for length "+ length);
+    // Obtenir la valeur de l'élément à la position index
+    public Object get(int index) {
+        Node node = this.premier;
 
-        Node node = head;
-
-        while (node != null) {
-            if (node.indexNode == index) {
-                return node.data;
+        if( index >= 0 && index < length() ) {
+            for( int i =0 ; i < index; i++ ) {
+                node = node.prochain;
             }
-
-            node = node.next;
+            return node;
         }
 
         return null;
     }
-    /**
-     *
-     * @param index
-     * @param value
-     * @throws NullPointerException
-     */
-    public void set(int index, Object value)throws NullPointerException {
 
-        if(index < 0 || index >= this.length)
-            throw new ArrayIndexOutOfBoundsException("your Index  out of bounds ");
+    // Ajouter ou mettre à jour l'élément à la position index
+    public void set(int index, Object value) {
+        try {
+            get( i ).element = value;
+        } catch( ListIndexOutOfBounds e ) {
+            System.out.println( e.getMessage() );
+            System.exit( 1 );
+        }
+        // TODO À compléter
+    }
 
+    // Supprimer l'élément à la position index
+    public void remove( int i ) {         // Delete ith element
+        int retour = 0;
+
+        // Cas 1 : retirer le premier élément
+        if( i == 0 ) {
+            retour = this.premier.element;
+            this.premier = this.premier.prochain;
+        }
+
+        // Cas 2 : retirer le ième élément
         else {
-                Node node = head;
-                Node previous = null;
+            try {
+                Node precedent = getNoeud( i - 1 );
+                // On obtient l'element i
+                retour = precedent.prochain.element;
 
-                if (node == null) {
-                    head = new Node(index, value);
-
-                } else {
-                    while (node != null) {
-                        if (node.indexNode == index) {
-                            node.data = value;
-                            break;
-
-                        } else if(node.indexNode > index) {
-                            if (previous == null) {
-                                head = new Node(index, value);
-                                head.next = node;
-
-                            } else {
-                                previous.next = new Node(index, value);
-                                previous.next.next = node;
-                            }
-                            break;
-                        } else {
-
-                            previous = node;
-                            node = previous.next;
-
-                            if (node == null) {
-                                previous.next = new Node(index, value);
-                            }
-                        }
-                    }
-                }
-
+                // On connecte le noeud i-1 au noeud i+1
+                precedent.prochain = precedent.prochain.prochain;
+            } catch ( ListIndexOutOfBounds e ) {
+                System.out.println( e.getMessage() );
+                System.exit( 1 );
             }
+        }
+        return retour;
     }
 
     /**
-     *
-     * @param index
+     * Affiche les éléments de la liste
      */
-    public void remove(int index) {
+    public void print() {
+        Node node = this.premier;
 
-        if(index < 0 || index >= this.length)
-            throw new ArrayIndexOutOfBoundsException("Array index out of range: "+index);
-
-        Node nodeCuren = head ;
-
-        // si on juste un node a la position 0
-        if(nodeCuren.next == null)
-            head = null;
-
-        else {
-
-            Node previous = null;
-            while (nodeCuren != null){
-
-                if(nodeCuren.indexNode == index ) {
-                    // supprimer le prmier node d un vector length > 0
-                    if (previous == null) {
-                        this.head = nodeCuren.next;
-
-
-                    } else {
-                        //suprimer le dernier node
-                        if (nodeCuren.next == null) {
-                            previous.next = null;
-
-                        // suprimer un node au milieu de la liste
-                        } else {
-                            previous.next = nodeCuren.next;
-                        }
-                    }
-                }
-                previous = nodeCuren;
-                nodeCuren = previous.next;
-            }
+        while( node != null ) {
+            System.out.println( node.element );
+            node = node.prochain;
         }
     }
 
-    /**
-     *
-     * @return la taille  de vector null
-     */
-   public int length() {
+    // Longueur du vecteur creux
+    public int length() {
         int length = this.length;
         Node node = head;
 
@@ -167,31 +125,17 @@ public class SparseVector {
         return length;
     }
 
-    /**
-     *
-     * @return la taille de vector non null
-     */
+    // Nombre d'éléments non nuls
     public int size() {
-        int length = 0;
-        Node node = head;
+        int size = 0;
+        Node node = this.premier;
 
-        while(node != null) {
-            node = node.next;
-            length ++;
+        while( node != null ) {
+            size++;
+            node = node.prochain;
         }
-
-        return length;
+        return size;
     }
 
-    /**
-     * méthode pour tester
-     */
-    public void print() {
-        Node node = this.head;
 
-        while(node != null) {
-            System.out.println(node.data);
-            node = node.next;
-        }
-    }
 }
